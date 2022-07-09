@@ -11,7 +11,7 @@ A Powershell Script to export a given github repository or subfolders/files of i
 + `<user>` Mandatory. The user of github, e.g. 'mwetzko'
 + `<repo>` Mandatory. The repository of the github user, e.g. 'Tools'
 + `[subfolder/file]` Optional. The subfolder or file to export.
-+ `[outdir]` Optional. The path, where to download files to.
++ `[outdir]` Optional. The path, where to download files to. If you provide a relative path, it's based on the directory, where the script resides!
 
 ### Sample
 
