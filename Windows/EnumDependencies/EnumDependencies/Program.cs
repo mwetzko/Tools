@@ -19,20 +19,9 @@ namespace EnumDependencies
                     if (filename.EndsWith(".dll", System.StringComparison.InvariantCultureIgnoreCase) ||
                         filename.EndsWith(".exe", System.StringComparison.InvariantCultureIgnoreCase))
                     {
-                        using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
+                        fixed (byte* b = File.ReadAllBytes(filename))
                         {
-                            byte[] data = new byte[fs.Length];
-
-                            fs.Read(data, 0, data.Length);
-
-                            fixed (byte* b = data)
-                            {
-                                EnumDependencies((IntPtr)b);
-                            }
-
-                            fs.Position = 0;
-
-                            fs.Write(data, 0, data.Length);
+                            EnumDependencies((IntPtr)b);
                         }
                     }
                 }
