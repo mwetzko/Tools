@@ -8,6 +8,10 @@ MousePositionHandleInfo allows you to inspect Windows handles (HWND) while movin
 
 While the application is running, press and hold CTRL key on your keyboard while moving the mouse. Release the CTRL key to save the info displayed.
 
+## Requirements
+
+Visual Studio 2022 or newer & .NET 6
+
 ## Screenshot
 
 ![MousePositionHandleInfo1](https://user-images.githubusercontent.com/49561427/156413968-ede9bcad-c847-4c71-98fd-c0e0d788e084.jpg)
