@@ -47,6 +47,6 @@ $filter | ForEach-Object {
             $null = New-Item $dir -ItemType "directory"
         }
 
-        Invoke-WebRequest $_.url -OutFile $filename
+        Invoke-WebRequest "https://github.com/$($user)/$($repo)/raw/master/$($_.path)" -OutFile $filename
     }
 }
