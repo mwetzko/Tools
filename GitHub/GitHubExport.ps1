@@ -23,21 +23,28 @@ if (!($data.tree) -or ($data.tree.length -eq 0)) {
     throw "Repo is empty"    
 }
 
-$path = $path.TrimStart("/")
+$path = $path.Trim("/")
 
 if ($path -eq "") {
     $filter = $data.tree
 }
 else {
-    $match = "^$($path.TrimEnd("/"))/"
+    $match = "^$($path)/"
     $filter = $data.tree | Where-Object { ($_.path -eq $path) -or ($_.path -match $match) }
 }
+
+$null = $path -match "^((?:[^/]*/)*)"
+
+$remove = ($Matches.1).Length
 
 $outdir = (Get-Item -Path $outdir).FullName
 
 $filter | ForEach-Object {
     if ($_.type -ne "tree") {
-        $filename = Join-Path $outdir $_.path
+        
+        $part = $_.path.Substring($remove)
+        
+        $filename = Join-Path $outdir $part
 
         $filename
 
