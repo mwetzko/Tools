@@ -19,7 +19,7 @@ namespace EnumDependencies
                     if (filename.EndsWith(".dll", System.StringComparison.InvariantCultureIgnoreCase) ||
                         filename.EndsWith(".exe", System.StringComparison.InvariantCultureIgnoreCase))
                     {
-                        using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
+                        using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
                         {
                             byte[] data = new byte[fs.Length];
 
