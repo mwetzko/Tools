@@ -1,3 +1,12 @@
+# Author: Martin Wetzko
+# Thanks to https://reelyactive.github.io/diy/pi-kiosk/ for making this script possible
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 param(
     [Parameter(Mandatory, Position = 0, HelpMessage = "Hostname")]
     [string] $hostname,
@@ -20,12 +29,32 @@ if (!$plink) {
     return
 }
 
+$pscp = & ".\EnsurePscp.ps1"
+
+if (!$pscp) {
+    return
+}
+
 function ExecSSH {
     param(
         [Parameter(Mandatory, Position = 0)]
         [string] $commands
     )
-    & $plink "$($username)@$($hostname)" -pw $password -batch $commands
+    & $plink -batch -pw "$($password)" "$($username)@$($hostname)" "$($commands)"
+
+    if (!$?) {        
+        throw "Last command failed"
+    }
+}
+
+function ExecSCP {
+    param(
+        [Parameter(Mandatory, Position = 0)]
+        [string] $source,
+        [Parameter(Mandatory, Position = 1)]
+        [string] $destination
+    )
+    & $pscp -batch -pw "$($password)" $source "$($username)@$($hostname):$($destination)"
 
     if (!$?) {        
         throw "Last command failed"
@@ -51,37 +80,28 @@ try {
 
     $null = ExecSSH "sudo apt-get install matchbox-window-manager xautomation unclutter --yes"
 
-    Write-Host "Create Autorun script..." -ForegroundColor DarkGray
+    Write-Host "Ensure kiosk script..." -ForegroundColor DarkGray
 
-    $kiosk = ExecSSH "test -f ~/kiosk && echo 'EXISTS' || echo ''"
-
-    if ($kiosk -match "EXISTS") {
-        Write-Host "Autorun script exists already, make a new one..." -ForegroundColor DarkGray
-        $null = ExecSSH "sudo rm -rf ~/kiosk"
-    }
-
-    $null = ExecSSH "echo ""#!/bin/sh"" >> ~/kiosk"
-    $null = ExecSSH "echo ""if ! xset q &> /dev/null; then"" >> ~/kiosk"
-    $null = ExecSSH "echo ""exit 1"" >> ~/kiosk"
-    $null = ExecSSH "echo ""fi"" >> ~/kiosk"
-    $null = ExecSSH "echo ""xset -dpms     # disable DPMS (Energy Star) features."" >> ~/kiosk"
-    $null = ExecSSH "echo ""xset s off     # disable screen saver"" >> ~/kiosk"
-    $null = ExecSSH "echo ""xset s noblank # don't blank the video device"" >> ~/kiosk"
-    $null = ExecSSH "echo ""matchbox-window-manager -use_titlebar no &"" >> ~/kiosk"
-    $null = ExecSSH "echo ""unclutter &    # hide X mouse cursor unless mouse activated"" >> ~/kiosk"
-    $null = ExecSSH "echo ""chromium --display=:0 --kiosk --incognito --window-position=0,0 $($url)"" >> ~/kiosk"
+    $null = ExecSCP ".\Template.WebKiosk.txt" "/home/$($username)/kiosk"
+    $null = ExecSSH "sudo sed -i 's;chrome://version;$($url);g' ~/kiosk"
     $null = ExecSSH "sudo chmod 755 ~/kiosk"
 
     Write-Host "Prepare kiosk script for auto start..." -ForegroundColor DarkGray
 
     $bashrc = ExecSSH "cat ~/.bashrc"
-
-    $cmd = "./kiosk &"
-
-    if ($bashrc -notcontains $cmd) {
+    
+    if ($bashrc -notcontains "xinit ./kiosk -- vt`$(fgconsole)") {
         $null = ExecSSH "echo """" >> ~/.bashrc"
-        $null = ExecSSH "echo ""$($cmd)"" >> ~/.bashrc"
+        # use \ to escape variable sequence
+        $null = ExecSSH "echo ""xinit ./kiosk -- vt\`$(fgconsole)"" >> ~/.bashrc"
     }
+    
+    Write-Host "Make remote device boot into console..." -ForegroundColor DarkGray
+
+    $null = ExecSCP ".\Template.Autologin.txt" "/home/$($username)/auto.txt"
+    $null = ExecSSH "sudo sed -i 's;`$USER;$($username);g' ~/auto.txt"
+    $null = ExecSSH "sudo mv -f ~/auto.txt /etc/systemd/system/getty@tty1.service.d/autologin.conf"
+    $null = ExecSSH "sudo systemctl --quiet set-default multi-user.target"
     
     if ($reboot) {
         Write-Host "Rebooting remote device..." -ForegroundColor DarkGray
