@@ -1,3 +1,4 @@
+# Author: Martin Wetzko
 param (
     [Parameter(Mandatory = $true)]
     [ValidateSet('x86', 'x64')]

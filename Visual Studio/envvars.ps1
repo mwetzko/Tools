@@ -1,3 +1,4 @@
+# Author: Martin Wetzko
 function Find-EnvObject {
     param (
         [Parameter(Position = 0)]

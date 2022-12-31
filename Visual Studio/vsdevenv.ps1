@@ -1,3 +1,4 @@
+# Author: Martin Wetzko
 function Invoke-VSDevEnvironment {
     $installationPath = & ".\vswhere.exe" -latest -property installationPath
     $Command = Join-Path $installationPath "Common7\Tools\vsdevcmd.bat"
