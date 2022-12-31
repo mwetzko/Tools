@@ -28,6 +28,8 @@ try {
     . ".\EnsurePlink.ps1"
     . ".\EnsurePscp.ps1"
 
+    TestSSH
+
     $os = ExecSSH "uname -srv"
 
     Write-Host "Remote machine is: " -NoNewline -ForegroundColor DarkGray

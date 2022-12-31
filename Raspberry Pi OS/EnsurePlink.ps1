@@ -29,3 +29,15 @@ function ExecSSH {
         throw "Last command failed"
     }
 }
+
+function TestSSH {
+    $res = & $plink -pw "$($password)" "$($username)@$($hostname)" "echo test-connection"
+
+    if (!$?) {        
+        throw "Last command failed"
+    }
+
+    if ($res -ne "test-connection") {        
+        throw "Connection test to remote device failed. Make sure you can connect to the device."        
+    }
+}
