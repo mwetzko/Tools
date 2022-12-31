@@ -10,18 +10,24 @@ $ErrorActionPreference = "Stop"
 
 Push-Location (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
 
-try {
+$pscp = Get-Command "PSCP.EXE" -ErrorAction Ignore
 
-    $pscp = Get-Command "PSCP.EXE" -ErrorAction Ignore
-
-    if (!$pscp) {
-        throw "PSCP.EXE (From Putty) is required to run all SSH operations. Please install Putty package!"
-    }
-
-    Write-Host "Using '$($pscp.Path)' for SSH copy file tasks"
-
-    $pscp
+if (!$pscp) {
+    throw "PSCP.EXE (From Putty) is required to run all SSH operations. Please install Putty package!"
 }
-catch {
-    Write-Host $_.Exception.Message -ForegroundColor Red
+
+Write-Host "Using '$($pscp.Path)' for SSH copy file tasks"    
+
+function ExecSCP {
+    param(
+        [Parameter(Mandatory, Position = 0)]
+        [string] $source,
+        [Parameter(Mandatory, Position = 1)]
+        [string] $destination
+    )
+    & $pscp -batch -pw "$($password)" $source "$($username)@$($hostname):$($destination)"
+
+    if (!$?) {        
+        throw "Last command failed"
+    }
 }

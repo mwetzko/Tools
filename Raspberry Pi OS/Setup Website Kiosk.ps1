@@ -23,45 +23,10 @@ $ErrorActionPreference = "Stop"
 
 Push-Location (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
 
-$plink = & ".\EnsurePlink.ps1"
-
-if (!$plink) {
-    return
-}
-
-$pscp = & ".\EnsurePscp.ps1"
-
-if (!$pscp) {
-    return
-}
-
-function ExecSSH {
-    param(
-        [Parameter(Mandatory, Position = 0)]
-        [string] $commands
-    )
-    & $plink -batch -pw "$($password)" "$($username)@$($hostname)" "$($commands)"
-
-    if (!$?) {        
-        throw "Last command failed"
-    }
-}
-
-function ExecSCP {
-    param(
-        [Parameter(Mandatory, Position = 0)]
-        [string] $source,
-        [Parameter(Mandatory, Position = 1)]
-        [string] $destination
-    )
-    & $pscp -batch -pw "$($password)" $source "$($username)@$($hostname):$($destination)"
-
-    if (!$?) {        
-        throw "Last command failed"
-    }
-}
-
 try {
+
+    . ".\EnsurePlink.ps1"
+    . ".\EnsurePscp.ps1"
 
     $os = ExecSSH "uname -srv"
 

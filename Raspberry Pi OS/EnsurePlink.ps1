@@ -10,18 +10,22 @@ $ErrorActionPreference = "Stop"
 
 Push-Location (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
 
-try {
+$plink = Get-Command "PLINK.EXE" -ErrorAction Ignore
 
-    $plink = Get-Command "PLINK.EXE" -ErrorAction Ignore
-
-    if (!$plink) {
-        throw "PLINK.EXE (From Putty) is required to run all SSH operations. Please install Putty package!"
-    }
-
-    Write-Host "Using '$($plink.Path)' for SSH tasks"
-
-    $plink
+if (!$plink) {
+    throw "PLINK.EXE (From Putty) is required to run all SSH operations. Please install Putty package!"
 }
-catch {
-    Write-Host $_.Exception.Message -ForegroundColor Red
+
+Write-Host "Using '$($plink.Path)' for SSH tasks"
+
+function ExecSSH {
+    param(
+        [Parameter(Mandatory, Position = 0)]
+        [string] $commands
+    )
+    & $plink -batch -pw "$($password)" "$($username)@$($hostname)" "$($commands)"
+
+    if (!$?) {        
+        throw "Last command failed"
+    }
 }
