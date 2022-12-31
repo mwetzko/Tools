@@ -1,3 +1,4 @@
+# Author: Martin Wetzko
 param(
     [Parameter(Mandatory, Position = 0)]
     [string] $user,
