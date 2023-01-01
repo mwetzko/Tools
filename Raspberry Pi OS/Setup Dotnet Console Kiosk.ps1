@@ -45,7 +45,7 @@ try {
 
     $null = ExecSSH "sudo apt-get install mono-complete --yes"
     
-    Write-Host "Upload console app..." -ForegroundColor DarkGray
+    Write-Host "Uploading app files..." -ForegroundColor DarkGray
 
     $null = ExecSSH "rm -rf ~/kioskapp"
     $null = ExecSSH "mkdir ~/kioskapp"
