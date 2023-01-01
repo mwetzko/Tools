@@ -58,14 +58,7 @@ try {
     ExecKioskBash "xinit ./kiosk -- vt\`$(fgconsole)"
 
     . ".\AutoLogin.ps1"
-    
-    if ($reboot) {
-        Write-Host "Rebooting remote device..." -ForegroundColor DarkGray
-        $null = ExecSSH "sudo shutdown -r 0"
-    }
-    else {
-        Write-Host "Kiosk has been setup. You can now reboot the system." -ForegroundColor Green
-    }
+    . ".\AutoReboot.ps1"
 }
 catch {
     Write-Host $_.Exception.Message -ForegroundColor Red
