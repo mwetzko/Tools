@@ -1,7 +1,7 @@
 # Kiosk Scripts (Windows)
 
 Powershell scripts to convert Raspberry Pi (and other devices running Raspberry Pi OS) into Kiosk / Single App / Infotainment devices.
-- Clone all these files to your Windows device
+- Clone all these files to your Windows device (make sure to keep [CR]LF as they are in these files!)
 - Make sure you have Powershell 5 or PWSH
 - Make sure you have Putty.exe, Plink.exe and Pscp.exe installed
 - Make sure your remote device is running the latest Raspberry Pi OS (with UI)
