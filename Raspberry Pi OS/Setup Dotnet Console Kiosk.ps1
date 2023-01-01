@@ -56,7 +56,7 @@ try {
 
     . ".\AutoBash.ps1"
 
-    ExecKioskBash "mono ./kioskapp/$($startup)"
+    ExecKioskBash "reset && mono ./kioskapp/$($startup)"
     
     . ".\AutoLogin.ps1"
     . ".\AutoReboot.ps1"
