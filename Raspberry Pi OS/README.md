@@ -11,3 +11,17 @@ Powershell scripts to convert Raspberry Pi (and other devices running Raspberry 
 ## 🗎 Setup Website Kiosk.ps1
 
 This script displays a generic website, e.g. `https://github.com` as a fullscreen / single app / kiosk app using chromium.
+
+### Arguments
+
+`& '.\Setup Website Kiosk.ps1' <ip address/hostname> <username> <password> <url> [-reboot]`
+
++ `<ip address/hostname>` Mandatory. The ip address or hostname of the remote device, e.g. `192.168.10.12`
++ `<username>` Mandatory. The username to login to SSH into the remote device, e.g. `pi`
++ `<password>` Mandatory. The password to login to SSH into the remote device, e.g. `raspberry`
++ `<url>` Mandatory. The website url to display when the remote device is running, e.g. `https://github.com`
++ `[-reboot]` Optional. Reboots the remote device if kiosk installation has finished.
+
+### Sample
+
+`& '.\Setup Website Kiosk.ps1' 192.168.1.2 pi raspberry https://github.com -reboot`
