@@ -14,8 +14,10 @@ param(
     [string] $username,
     [Parameter(Mandatory, Position = 2, HelpMessage = "Password")]
     [string] $password,
-    [Parameter(Mandatory, Position = 3, HelpMessage = "Url")]
-    [string] $url,
+    [Parameter(Mandatory, Position = 3, HelpMessage = "Publish Folder")]
+    [string] $folder,
+    [Parameter(Mandatory, Position = 4, HelpMessage = "Startup File")]
+    [string] $startup,
     [switch] $reboot
 )
 
@@ -39,26 +41,25 @@ try {
 
     $null = ExecSSH "sudo apt-get update"
 
-    Write-Host "Installing Chromium..." -ForegroundColor DarkGray
+    Write-Host "Installing Mono..." -ForegroundColor DarkGray
 
-    $null = ExecSSH "sudo apt-get install chromium --yes"
+    $null = ExecSSH "sudo apt-get install mono-complete --yes"
+    
+    Write-Host "Upload console app..." -ForegroundColor DarkGray
 
-    Write-Host "Installing Window Manager..." -ForegroundColor DarkGray
+    $null = ExecSSH "rm -rf ~/kioskapp"
+    $null = ExecSSH "mkdir ~/kioskapp"
+    
+    $folder = Join-Path -Path $folder -ChildPath "*"
 
-    $null = ExecSSH "sudo apt-get install matchbox-window-manager xautomation unclutter --yes"
-
-    Write-Host "Ensure kiosk script..." -ForegroundColor DarkGray
-
-    $null = ExecSCP ".\Template.WebKiosk.txt" "/home/$($username)/kiosk"
-    $null = ExecSSH "sudo sed -i 's;chrome://version;$($url);g' ~/kiosk"
-    $null = ExecSSH "sudo chmod 755 ~/kiosk"
+    $null = ExecSCP "$($folder)" "/home/$($username)/kioskapp" -folder
 
     . ".\AutoBash.ps1"
 
-    ExecKioskBash "xinit ./kiosk -- vt\`$(fgconsole)"
-
-    . ".\AutoLogin.ps1"
+    ExecKioskBash "mono ./kioskapp/$($startup)"
     
+    . ".\AutoLogin.ps1"
+
     if ($reboot) {
         Write-Host "Rebooting remote device..." -ForegroundColor DarkGray
         $null = ExecSSH "sudo shutdown -r 0"

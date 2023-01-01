@@ -23,9 +23,16 @@ function ExecSCP {
         [Parameter(Mandatory, Position = 0)]
         [string] $source,
         [Parameter(Mandatory, Position = 1)]
-        [string] $destination
+        [string] $destination,
+        [switch] $folder
     )
-    & $pscp -batch -pw "$($password)" $source "$($username)@$($hostname):$($destination)"
+
+    if ($folder.IsPresent) {
+        & $pscp -r -batch -pw "$($password)" $source "$($username)@$($hostname):$($destination)"
+    }
+    else {
+        & $pscp -batch -pw "$($password)" $source "$($username)@$($hostname):$($destination)"
+    }
 
     if (!$?) {        
         throw "Last command failed"
