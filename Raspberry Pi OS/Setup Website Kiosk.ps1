@@ -15,7 +15,7 @@ param(
     [Parameter(Mandatory, Position = 2, HelpMessage = "Password")]
     [string] $password,
     [Parameter(Mandatory, Position = 3, HelpMessage = "Url")]
-    [string] $url,    
+    [string] $url,
     [switch] $reboot
 )
 
