@@ -1,0 +1,16 @@
+#!/bin/sh
+# Thanks to https://reelyactive.github.io/diy/pi-kiosk/ for making this script possible
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+xset -dpms     # disable DPMS (Energy Star) features.
+xset s off     # disable screen saver
+xset s noblank # don't blank the video device
+matchbox-window-manager -use_titlebar no &
+unclutter &    # hide X mouse cursor unless mouse activated
+./.dotnet/dotnet ./kioskapp/$STARTUP --contentroot $(realpath ./kioskapp) &
+chromium --display=:0 --kiosk --incognito --window-position=0,0 chrome://version/
