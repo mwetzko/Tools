@@ -41,7 +41,7 @@ try {
 
     $null = ExecSSH "sudo apt-get update"
 
-    & ".\InstallDotnet.ps1"
+    & ".\InstallDotnet.ps1" "--version latest"
     
     Write-Host "Uploading app files..." -ForegroundColor DarkGray
 
