@@ -39,9 +39,7 @@ try {
 
     $null = ExecSSH "sudo apt-get update"
 
-    Write-Host "Installing Chromium..." -ForegroundColor DarkGray
-
-    $null = ExecSSH "sudo apt-get install chromium --yes"
+    $browser = & ".\InstallChromium.ps1"
 
     Write-Host "Installing Window Manager..." -ForegroundColor DarkGray
 
@@ -50,6 +48,7 @@ try {
     Write-Host "Ensure kiosk script..." -ForegroundColor DarkGray
 
     $null = ExecSCP ".\Template.WebKiosk.txt" "/home/$($username)/kiosk"
+    $null = ExecSSH "sudo sed -i 's;chromium;$($browser);g' ~/kiosk"
     $null = ExecSSH "sudo sed -i 's;chrome://version;$($url);g' ~/kiosk"
     $null = ExecSSH "sudo chmod 755 ~/kiosk"
 
