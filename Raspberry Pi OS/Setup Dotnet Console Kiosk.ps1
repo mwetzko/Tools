@@ -41,9 +41,7 @@ try {
 
     $null = ExecSSH "sudo apt-get update"
 
-    Write-Host "Installing Mono..." -ForegroundColor DarkGray
-
-    $null = ExecSSH "sudo apt-get install mono-complete --yes"
+    & ".\InstallDotnet.ps1"
     
     Write-Host "Uploading app files..." -ForegroundColor DarkGray
 
@@ -56,7 +54,7 @@ try {
 
     . ".\AutoBash.ps1"
 
-    ExecKioskBash "reset && mono ./kioskapp/$($startup)"
+    ExecKioskBash "reset && ./.dotnet/dotnet ./kioskapp/$($startup)"
     
     . ".\AutoLogin.ps1"
     . ".\AutoReboot.ps1"
