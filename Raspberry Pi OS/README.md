@@ -72,14 +72,14 @@ This script displays a dotnet blazor server app as a fullscreen / single app / k
 
 ### Arguments
 
-`& '.\Setup Dotnet Blazor Kiosk.ps1' <ip-address/hostname> <username> <password> <publish-path> <name-of-dll> [url] [-reboot]`
+`& '.\Setup Dotnet Blazor Kiosk.ps1' <ip-address/hostname> <username> <password> <publish-path> <name-of-dll> [-url <url>] [-reboot]`
 
 + `<ip-address/hostname>` Mandatory. The ip address or hostname of the remote device, e.g. `192.168.10.12`
 + `<username>` Mandatory. The username to login to SSH into the remote device, e.g. `pi`
 + `<password>` Mandatory. The password to login to SSH into the remote device, e.g. `raspberry`
 + `<publish-path>` Mandatory. The path of the published files on the local disk. Make sure wwwroot is inside of this folder.
 + `<name-of-dll>` Mandatory. The name of the dll to load
-+ `[url]` Optional. If you changed the default hosting url from http://localhost:5000 to any other of you choice, provide the new url here.
++ `[-url]` Optional. If you changed the default hosting url from http://localhost:5000 to any other of you choice, provide the new url here.
 + `[-reboot]` Optional. Reboots the remote device if kiosk installation has finished
 
 ### Sample
