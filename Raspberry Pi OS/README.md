@@ -28,11 +28,19 @@ This script displays a generic website, e.g. `https://github.com` as a fullscree
 
 `& '.\Setup Website Kiosk.ps1' 192.168.1.2 pi raspberry https://github.com -reboot`
 
+### Testing
+
+This script has been testet with
+- Raspberry Pi OS Desktop (Bullseye i386) on a virtual machine
+- Raspberry Pi OS Stretch (bpi m2, Kernel 4.4) on a banana pi m2 zero (Arm H3)
+
 <br/>
 
 ## 🗎 Setup Dotnet Console Kiosk.ps1
 
 This script displays a dotnet/mono compatible console app as a fullscreen / single app / kiosk app.
+
+> 📝 This script does not work on x86 releases of Raspberry Pi OS as dotnet install script, which is used for installing dotnet, does not support x86 CPU's (yet).
 
 ### Arguments
 
@@ -48,3 +56,9 @@ This script displays a dotnet/mono compatible console app as a fullscreen / sing
 ### Sample
 
 `& '.\Setup Dotnet Console Kiosk.ps1' 192.168.1.2 pi raspberry C:\Dotnet\ConsoleApp1\bin\Release\net6.0\publish ConsoleApp1.dll -reboot`
+
+
+### Testing
+
+This script has been testet with
+- Raspberry Pi OS Stretch (bpi m2, Kernel 4.4) on a banana pi m2 zero (Arm H3)
