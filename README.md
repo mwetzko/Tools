@@ -1,19 +1,15 @@
-# Tools
+# 📁 GitHub
 
-Various tools to improve software development
+Tools to use with github.com
 
-## 📁 GitHub
+# 📁 Raspberry Pi OS
 
-Tools to work with github.com
+Tools to use with Raspberry Pi OS (formerly Raspbian)
 
-## 📁 Raspberry Pi OS
+# 📁 Visual Studio
 
-Tools to work with Raspberry Pi OS (formerly Raspbian)
+Tools to use with compiling source code or give access to Visual Studio Developer tools
 
-## 📁 Visual Studio
-
-Tools to improve/help with compiling source code or give access to Visual Studio Developer tools
-
-## 📁 Windows
+# 📁 Windows
 
 Tools to use with Windows
